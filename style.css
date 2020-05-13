@@ -95,6 +95,7 @@ ul{
   border-radius: 10px;
   display: none;
 }
+
 /* LARGE SCREENS */
 @media(min-width:700px){
   .wrapper{

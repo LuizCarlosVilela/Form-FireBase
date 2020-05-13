@@ -11,8 +11,6 @@ var firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 
-//Nome da "tabela" que vai ser messages
-var messagesRef = firebase.database().ref('messages');
 
 
 document.getElementById("form").addEventListener("submit", e =>{
@@ -48,14 +46,33 @@ function getValueInput(e){
 }
 
 function saveMessage(name, company, email, phone, message){
+    //Nome da "tabela" que vai ser messages
     //Colocando os dados na tabela em forma de jason
-    var novaMenssagem = messagesRef.push();
-    novaMenssagem.set({
+    firebase.database().ref('messages').push().set({
         name: name,
         company: company,
         email: email,
         phone: phone,
         message: message
     });
-
 }
+
+function getMessage(){
+    //Pegando os dados do firebase
+    firebase.database().ref('messages').on('value', e =>{
+        //Transformando os dados em array, os dados que vem em json pelo e.val()
+        var json  = e.val();
+        var array = Object.values(json); 
+
+        var cad = document.getElementById("cadastros");
+
+        //Percorrendo o array e criando uma li a cada cadastro no firebase
+        array.forEach(e => {
+            var li = document.createElement("li");
+            li.innerHTML = "Nome: "+e.name+"<br> Email: "+e.email+"<br><br>";
+
+            cad.appendChild(li);
+        });
+    });
+}
+getMessage();
